@@ -7,10 +7,11 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }: {
-    nixosConfigurations = {
+  outputs = { nixpkgs, home-manager, ... }@attrs: {
+    nixosConfigurations.apply = {
       hostname = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = attrs;
         modules = [
           ./configuration.nix
           home-manager.nixosModules.home-manager
