@@ -12,30 +12,21 @@
 
   outputs = { self, nixpkgs, home-manager, ... }@attrs:
     let
-      system = "x86_64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
+      hmConfig = {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.users.jmct.imports = [ ./home.nix ];
       };
-      lib = nixpkgs.lib;
     in {
       nixosConfigurations = {
         apply = nixpkgs.lib.nixosSystem {
-          inherit system;
-          modules = [ ./configuration.nix ];
-          };
-      };
-      hmConfig = {
-        apply = home-manager.lib.homeManagerConfiguration {
-          inherit system pkgs;
-          useGlobalPkgs = true;
-          useUserPackages = true;
-          username = "jmct";
-          homeDirectory = "home/jmct";
-          configuration = {
-            imports = [ ./home.nix ];
-          };
+          system = "x86_64-linux";
+          specialArgs = attrs;
+          modules = [
+            ./configuration.nix
+            home-manager.nixosModules.home-manager hmConfig
+          ];
         };
+      };
     };
-};
 }

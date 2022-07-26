@@ -1,6 +1,10 @@
 {config, pkgs, lib, home-manager, ... }:
 
-let
+{
+  imports = [
+    ./packages.nix
+    ./hm-programs.nix
+  ];
 
   home = {
     stateVersion = "22.05";
@@ -15,7 +19,4 @@ let
   systemd.user.startServices = true;
 
   xdg.enable = true;
-
-in {
-  imports = [ ./packages.nix ];
 }

@@ -8,7 +8,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <home-manager/nixos>
     ];
 
   # Bootloader.
@@ -72,6 +71,7 @@
   users.users.jmct = {
     isNormalUser = true;
     description = "jmct";
+    home = "/home/jmct";
     extraGroups = [ "networkmanager" "wheel" ];
     initialPassword = "password";
   };
@@ -120,17 +120,5 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-};
-
-  home-manager.users.jmct = { pkgs, ... }: {
-
-    home.packages = with pkgs;
-      [
-        cowsay
-        feh
-        firefox
-      ];
-
   };
-
 }
