@@ -2,12 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, lib, pkgs, home-manager... }:
+{ config, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      <home-manager/nixos>
     ];
 
   # Bootloader.
@@ -72,10 +73,7 @@
     isNormalUser = true;
     description = "jmct";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      firefox
-    #  thunderbird
-    ];
+    initialPassword = "password";
   };
 
   # Allow unfree packages
@@ -123,5 +121,16 @@
       experimental-features = nix-command flakes
     '';
 };
+
+  home-manager.users.jmct = { pkgs, ... }: {
+
+    home.packages = with pkgs;
+      [
+        cowsay
+        feh
+        firefox
+      ];
+
+  };
 
 }
