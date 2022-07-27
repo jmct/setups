@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./packages.nix
+    ./hm-packages.nix
     ./hm-programs.nix
   ];
 

@@ -12,5 +12,8 @@
     signal-desktop
     zoom-us
 
-    ];
+    # misc
+    cowsay
+    feh
+  ];
 }
