@@ -1,0 +1,118 @@
+Introduction
+============
+
+This repo is both my system configuration and my notes regarding the process of learning Nix/NixOS.
+
+Goals:
+
+  * I want to be able to have reproducable environments for each of my courses
+  * I want to have consistent setups/environments on different machines (to the degree possible)
+
+So everything I say in this document, particularly early-on, should be understood to have the disclaimer that I don't know what I'm talking about!
+This is just my thoughts/understanding as I work through it.
+
+
+Background
+==========
+
+I know nothing about Nix, I've used Arch Linux since 2010 and so my mental model of a linux system is closely tied to that (for better or worse).
+
+
+After reading up on NixOS and how people configure their system I've learned that there are two ways I can configure a NixOS system:
+
+  * You can keep your configuration in `/etc/nixos/` (usually `configuration.nix` and `hardware-configuration.nix`)
+    - You can do everything 'manually' or use 'channels' which are kind of like package repositories.
+  * You can use `flakes` which, among other things, allows you to store your entire system configuration in another directory (usually in a git repo like this one).
+
+The first approach is _more_ like a traditional Linux system in that you have the implicit state of the channels/repositories that can shift under you.
+Because of this I've opted in for the 'more pure' approach using 'flakes'.
+Flakes are also used for individual projects and the motivation/explanation can be found here: [https://www.tweag.io/blog/2020-05-25-flakes/](https://www.tweag.io/blog/2020-05-25-flakes/).
+
+Initial Installation
+====================
+
+Because I am completely new at NixOS, I decided to get a working system first and then adapt it from there.
+I used the graphical installer and just installed a default GNOME-based system.
+It was very easy to get up and running and the hardware scan worked great.
+
+The results of the hardward scan and the initial configuration options are put in `hardware-configurations.nix` and `configuration.nix`, respectively.
+After the initial install the configuration lives in `/etc/nixos/`, I copied those files into this repo and tried to convert the configuration into a Flake-based configuration.
+However, let's learn a little about Nix-the-language before we dive into the Flake setup.
+
+Nix, the language
+=================
+
+Functions
+---------
+
+Nix is a functional language, and as such many of the overall ideas are familiar to me.
+It relies _a lot_ on its notation for lambdas, in fact there's no shorthand for defining functions, it's just named lamndas.
+The Haskell lambda `\x -> x + x` would be written as `x : x + x` in Nix.
+So defining a function named `double` would look like this:
+
+```{nix}
+let
+  double = x : x  + x;
+in
+  double 42
+```
+
+Structured Data
+---------------
+
+### Sets
+
+Nix has what are called 'composite' types, which are similar to Lua tables.
+These are ad-hoc key-value maps:
+
+```{nix}
+{ answer = 42 ; }.answer # This evaluates to 42
+```
+
+You can also use Sets to create functions with named arguments (And optional arguments).
+For example:
+
+```{nix}
+let
+  fun = { x, y, z, ...}@attrs: builtins.attrNames attrs;
+in
+  fun {x = 42; y = 42; z = 42; a = 42;}
+```
+
+The function above takes a Set as an argument.
+The Set passed to `fun` _must_ include `x`, `y`, and `z`, but it can also have additional elements.
+If any of the required arguments are missing, then the program will result in an error.
+
+### Lists
+
+Lists are like Haskell lists, but allow heterogeneous types and don't need commas:
+
+```{nix}
+[ 1 2 3 "four" ]
+```
+
+Some useful functionas are `attrNames` (returns the keys of a set), `elemAt` (indexes into the list) and `++` (infix append).
+
+Modules
+-------
+
+The main idea with Modules in Nix is that the result of an expression can be Nix Set that acts as the publis API to the module.
+For example:
+
+```{nix}
+let
+  double = x : x + x;
+
+  quadruple = x : (double x) + (double x);
+in {
+  fourX = quadruple;
+}
+```
+
+The code above makes a 'module' where the only exposed functionality is the `fourX` function.
+Both `double` and `quadruple` are private, and not exposed as a result of this expression.
+
+Flakes
+======
+
+

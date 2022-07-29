@@ -1,0 +1,29 @@
+set imap_user = 'jmct@jmct.cc'
+set imap_pass = `op item get 25fbxgy7m6xyy7spubh64fm3o4 --fields label=credential`
+set from=jmct@jmct.cc
+my_hdr Bcc: jmct@jmct.cc
+#set envelope_from=yes
+
+set folder = "imaps://imap.fastmail.com/"
+set spoolfile = "imaps://imap.fastmail.com/INBOX"
+set postponed = "+Drafts"
+set header_cache=~/.cache/mutt/jmct.cc
+
+set smtp_url = "smtps://jmct@jmct.cc@smtp.fastmail.com"
+set smtp_pass = `op item get 25fbxgy7m6xyy7spubh64fm3o4 --fields label=credential`
+
+mailboxes =Inbox =Sent\ Items
+
+# This is a conundrum. If we want to see our messages in the thread
+# we have to set `record` to `+/inbox`. But... regardless of
+# what `record` is set to, we'll get duplicates of my sent
+# messages because GMAIL is keeping track of the sent
+# emails too. Setting `copy` to `no`, solves the duplicate
+# email problem at the cost of not seeing my emails in a thread.
+# I'm currently making this tradeoff because the text of my email
+# is usually in the email I'm responding to...
+set record ="+Sent Items"
+set copy=no
+
+
+source ~/.mutt-common

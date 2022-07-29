@@ -15,5 +15,12 @@
     # misc
     cowsay
     feh
-  ];
+    _1password
+    _1password-gui
+
+    # development
+    silver-searcher  # Faster searching
+    kitty            # Terminal of Choice
+
+    ];
 }

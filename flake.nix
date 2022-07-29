@@ -10,6 +10,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
+
+  # The outputs determine the final configuration
   outputs = { self, nixpkgs, home-manager, ... }@attrs:
     let
       hmConfig = {
@@ -24,6 +26,7 @@
           specialArgs = attrs;
           modules = [
             ./configuration.nix
+            ./fonts.nix
             home-manager.nixosModules.home-manager hmConfig
           ];
         };

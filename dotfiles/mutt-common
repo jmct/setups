@@ -1,0 +1,54 @@
+set editor="vim"
+
+set ssl_starttls=yes
+set ssl_force_tls=yes
+
+set realname="José Manuel Calderón Trilla"
+
+# Use threads but show the most recent thread at the top of the view
+set sort = threads
+set sort_aux = reverse-last-date-received
+
+# Sidebar options
+set sidebar_visible
+set sidebar_width = 25
+set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
+set sidebar_sort_method='unsorted'
+
+# Change the way emails are presented in the index
+set index_format = "%4C | %Z | %-60.60s %> | From: %-15.15L | %-15.15t | "
+# Default: set index_format = "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"
+
+# make sure that mutt checks the new/unread for each mailbox automatically
+set mail_check_stats
+
+# Navigation of sidebar
+bind index,pager \CP sidebar-prev
+bind index,pager \CN sidebar-next
+bind index,pager \CO sidebar-open
+
+# Commands to sync email
+macro index O "<shell-escape>mbsync -a<enter>" "run mbsync to fetch email"
+
+# Command to query contacts using goobook
+set query_command = "goobook query '%s'"
+
+# Sending Mail
+#
+#set sendmail="/usr/bin/msmtp"
+set use_from=yes
+
+# My Macros
+macro index \ca \
+    "<tag-prefix><clear-flag>N<tag-prefix><clear-flag>O" \
+    "mark all tagged new as read"
+
+macro index a \
+    "<clear-flag>Nk<clear-flag>Ok<delete-message>" \
+    "mark message as read and delete"
+
+macro index,pager A "<pipe-message>goobook add<return>" \
+    "Add the sender to goobook contacts"
+
+macro index,pager \cb "<pipe-message> urlscan<Enter>" \
+    "call urlscan to extract URLs out of a message"
