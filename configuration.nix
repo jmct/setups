@@ -64,6 +64,8 @@
     #media-session.enable = true;
   };
 
+  users.groups.plugdev = {};
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -72,7 +74,7 @@
     isNormalUser = true;
     description = "jmct";
     home = "/home/jmct";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "plugdev" ];
     initialPassword = "password";
   };
 

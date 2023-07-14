@@ -20,5 +20,10 @@
       userName = "JMCT";
       userEmail = "jmct@jmct.cc";
     };
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
   };
 }

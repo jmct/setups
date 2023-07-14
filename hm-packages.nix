@@ -6,6 +6,7 @@
     # internet
     firefox
     neomutt
+    chromium
 
     # chat
     discord
@@ -15,6 +16,8 @@
     # misc
     cowsay
     feh
+    ledger-live-desktop
+    okular
     _1password
     _1password-gui
 

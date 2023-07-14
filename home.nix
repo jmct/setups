@@ -16,6 +16,7 @@
     };
 
     # Dotfiles that are manually included
+    file.".bashrc".source = ./dotfiles/bashrc;
     file.".vimrc".source = ./dotfiles/vimrc;
     file.".tmux.conf".source = ./dotfiles/tmux.conf;
     file.".fastmail-muttrc".source = ./dotfiles/fastmail-muttrc;
